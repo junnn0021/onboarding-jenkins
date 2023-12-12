@@ -5,7 +5,7 @@ pipeline {
         DOCKER_REGISTRY = credentials('dockerurl')
         DOCKER_USERNAME = credentials('username')
         DOCKER_PASSWORD = credentials('password')
-        BUILD_NUMBER_TAG = env.BUILD_NUMBER
+        BUILD_NUMBER_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
