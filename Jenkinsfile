@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Docker build with build number tag
-                    sh "docker build -t ${DOCKER_REGISTRY}/jenkins:${BUILD_NUMBER_TAG} ."
+                    sh "docker build -t \"${DOCKER_REGISTRY}/jenkins:${BUILD_NUMBER_TAG}\" ."
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     // Docker push with build number tag
-                    sh "docker push ${DOCKER_REGISTRY}/jenkins:${BUILD_NUMBER_TAG}"
+                    sh "docker push \"${DOCKER_REGISTRY}/jenkins:${BUILD_NUMBER_TAG}\""
                 }
             }
         }
