@@ -5,7 +5,7 @@ pipeline {
         DOCKER_REGISTRY = credentials('dockerurl') // Docker 레지스트리 URL
         DOCKER_USERNAME = credentials('username') // Docker 레지스트리 계정 Credential ID
         DOCKER_PASSWORD = credentials('password') // Docker 레지스트리 비밀번호 Credential ID
-        BUILD_NUMBER_TAG = env.BUILD_NUMBER // Jenkins에서 제공하는 빌드 번호를 사용
+        BUILD_NUMBER_TAG = "${env.BUILD_NUMBER}" // Jenkins에서 제공하는 빌드 번호를 사용
     }
 
     stages {
