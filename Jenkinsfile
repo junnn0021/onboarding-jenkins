@@ -1,14 +1,20 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_USERNAME = credentials('username')
+        DOCKER_PASSWORD = credentials('password')
+    }
+
     stages {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build with currentBuild.number tag
-                    sh "docker build -t $DOCKER_USERNAME/jenkins:${currentBuild.number} ."
-                    // Build with 'latest' tag
-                    sh "docker build -t $DOCKER_USERNAME/jenkins:latest ."
+                    withCredentials([string(credentialsId: 'username', variable: 'DOCKER_USERNAME'),
+                                     string(credentialsId: 'password', variable: 'DOCKER_PASSWORD')]) {
+                        sh "docker build -t $DOCKER_USERNAME/jenkins:${currentBuild.number} ."
+                        sh "docker build -t $DOCKER_USERNAME/jenkins:latest ."
+                    }
                 }
             }
         }
@@ -16,7 +22,10 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                    withCredentials([string(credentialsId: 'username', variable: 'DOCKER_USERNAME'),
+                                     string(credentialsId: 'password', variable: 'DOCKER_PASSWORD')]) {
+                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                    }
                 }
             }
         }
@@ -24,10 +33,11 @@ pipeline {
         stage('Docker Push') {
             steps {
                 script {
-                    // Push with currentBuild.number tag
-                    sh "docker push $DOCKER_USERNAME/jenkins:${currentBuild.number}"
-                    // Push with 'latest' tag
-                    sh 'docker push $DOCKER_USERNAME/jenkins:latest'
+                    withCredentials([string(credentialsId: 'username', variable: 'DOCKER_USERNAME'),
+                                     string(credentialsId: 'password', variable: 'DOCKER_PASSWORD')]) {
+                        sh "docker push $DOCKER_USERNAME/jenkins:${currentBuild.number}"
+                        sh 'docker push $DOCKER_USERNAME/jenkins:latest'
+                    }
                 }
             }
         }
@@ -36,10 +46,9 @@ pipeline {
     post {
         success {
             script {
-                // Remove local images after successful push
-                sh "docker rmi $DOCKER_USERNAME/jenkins:${currentBuild.number}"
-                sh 'docker rmi $DOCKER_USERNAME/jenkins:latest'
+                sh 'docker rmi $(docker images -q)'
             }
+            echo 'Docker image build, login, push, and local image cleanup successful!'
         }
 
         failure {
@@ -47,4 +56,3 @@ pipeline {
         }
     }
 }
-
