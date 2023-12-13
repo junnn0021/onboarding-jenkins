@@ -26,7 +26,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerurl', variable: 'DOCKER_REGISTRY'),
                                      string(credentialsId: 'username', variable: 'DOCKER_USERNAME'),
                                      string(credentialsId: 'password', variable: 'DOCKER_PASSWORD')]) {
-                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY'
+                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                     }
                 }
             }
