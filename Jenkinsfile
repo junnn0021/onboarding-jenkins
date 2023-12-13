@@ -8,6 +8,16 @@ pipeline {
     }
 
     stages {
+        stage('Check Environment Variables') {
+            steps {
+                script {
+                    echo "DOCKER_REGISTRY: ${DOCKER_REGISTRY}"
+                    echo "DOCKER_USERNAME: ${DOCKER_USERNAME}"
+                    echo "DOCKER_PASSWORD: ********"
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
