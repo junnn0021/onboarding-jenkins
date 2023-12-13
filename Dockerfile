@@ -1,5 +1,11 @@
 FROM ubuntu:20.04
 
+ENV TZ Asia/Seoul
+ENV PYTHONIOENCODING UTF-8
+ENV LC_CTYPE C.UTF-8
+
+RUN touch /etc/default/locale
+
 RUN echo 'export TEST=LJS' >> ~/.bashrc
 
 RUN apt-get update && \
@@ -19,7 +25,7 @@ RUN curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o 
 
 RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1
 
-RUN apt-get install -y  fontconfig openjdk-17-jre
+RUN apt-get install -y fontconfig openjdk-17-jre
 
 RUN wget -O /usr/share/keyrings/jenkins-keyring.asc \
     https://pkg.jenkins.io/debian/jenkins.io-2023.key
@@ -35,13 +41,13 @@ RUN apt-get update && \
 
 COPY run_check_jenkins.sh /run_check_jenkins.sh
 
+RUN chmod +x /run_check_jenkins.sh
+
+# RUN echo "*/5 * * * * /run_check_jenkins.sh >> /var/log/cron.log 2>&1" | crontab -
+
 RUN curl -s https://get.docker.com | sh
 
 RUN usermod -aG docker jenkins
-
-RUN chmod +x /run_check_jenkins.sh
-
-RUN echo "*/5 * * * * /run_check_jenkins.sh" | crontab -
 
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
