@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t $DOCKER_REGISTRY/jenkins:${currentBuild.number} ."
+                    sh "docker build -t $DOCKER_USERNAME/jenkins:${currentBuild.number} ."
                 }
             }
         }
@@ -27,7 +27,7 @@ pipeline {
         stage('Docker Push') {
             steps {
                 script {
-                    sh "docker push $DOCKER_REGISTRY/jenkins:${currentBuild.number}"
+                    sh "docker push $DOCKER_USERNAME/jenkins:${currentBuild.number}"
                 }
             }
         }
