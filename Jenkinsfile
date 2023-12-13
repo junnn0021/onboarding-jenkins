@@ -15,7 +15,7 @@ pipeline {
                                      string(credentialsId: 'username', variable: 'DOCKER_USERNAME'),
                                      string(credentialsId: 'password', variable: 'DOCKER_PASSWORD')]) {
                         def dockerUsername = sh(script: 'echo $DOCKER_USERNAME', returnStdout: true).trim()
-                        sh "docker build -t $dockerUsername/jenkins:${currentBuild.number} ."
+                        sh "docker build -t ${dockerUsername}/jenkins:${currentBuild.number} ."
                     }
                 }
             }
@@ -28,7 +28,7 @@ pipeline {
                                      string(credentialsId: 'username', variable: 'DOCKER_USERNAME'),
                                      string(credentialsId: 'password', variable: 'DOCKER_PASSWORD')]) {
                         def dockerUsername = sh(script: 'echo $DOCKER_USERNAME', returnStdout: true).trim()
-                        sh "docker login -u $dockerUsername -p $DOCKER_PASSWORD $DOCKER_REGISTRY"
+                        sh 'docker login -u ${dockerUsername} -p $DOCKER_PASSWORD $DOCKER_REGISTRY'
                     }
                 }
             }
@@ -41,7 +41,7 @@ pipeline {
                                      string(credentialsId: 'username', variable: 'DOCKER_USERNAME'),
                                      string(credentialsId: 'password', variable: 'DOCKER_PASSWORD')]) {
                         def dockerUsername = sh(script: 'echo $DOCKER_USERNAME', returnStdout: true).trim()
-                        sh "docker push $dockerUsername/jenkins:${currentBuild.number}"
+                        sh "docker push ${dockerUsername}/jenkins:${currentBuild.number}"
                     }
                 }
             }
