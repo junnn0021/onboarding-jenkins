@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t $DOCKER_USERNAME/jenkins:${currentBuild.number} ."
+                    sh('docker build -t $DOCKER_USERNAME/jenkins:${currentBuild.number} .')
                 }
             }
         }
@@ -19,7 +19,7 @@ pipeline {
         stage('Docker Login') {
             steps {
                 script {
-                    sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY"
+                    sh('docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY')
                 }
             }
         }
@@ -27,7 +27,7 @@ pipeline {
         stage('Docker Push') {
             steps {
                 script {
-                    sh "docker push $DOCKER_USERNAME/jenkins:${currentBuild.number}"
+                    sh('docker push $DOCKER_USERNAME/jenkins:${currentBuild.number}')
                 }
             }
         }
@@ -43,3 +43,4 @@ pipeline {
         }
     }
 }
+
