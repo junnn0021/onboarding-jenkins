@@ -14,7 +14,8 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerurl', variable: 'DOCKER_REGISTRY'),
                                      string(credentialsId: 'username', variable: 'DOCKER_USERNAME'),
                                      string(credentialsId: 'password', variable: 'DOCKER_PASSWORD')]) {
-                        sh "docker build -t $DOCKER_USERNAME/jenkins:${currentBuild.number} ."
+                        def dockerUsername = sh(script: 'echo $DOCKER_USERNAME', returnStdout: true).trim()
+                        sh "docker build -t $dockerUsername/jenkins:${currentBuild.number} ."
                     }
                 }
             }
@@ -26,7 +27,8 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerurl', variable: 'DOCKER_REGISTRY'),
                                      string(credentialsId: 'username', variable: 'DOCKER_USERNAME'),
                                      string(credentialsId: 'password', variable: 'DOCKER_PASSWORD')]) {
-                        sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY"
+                        def dockerUsername = sh(script: 'echo $DOCKER_USERNAME', returnStdout: true).trim()
+                        sh "docker login -u $dockerUsername -p $DOCKER_PASSWORD $DOCKER_REGISTRY"
                     }
                 }
             }
@@ -38,7 +40,8 @@ pipeline {
                     withCredentials([string(credentialsId: 'dockerurl', variable: 'DOCKER_REGISTRY'),
                                      string(credentialsId: 'username', variable: 'DOCKER_USERNAME'),
                                      string(credentialsId: 'password', variable: 'DOCKER_PASSWORD')]) {
-                        sh "docker push $DOCKER_USERNAME/jenkins:${currentBuild.number}"
+                        def dockerUsername = sh(script: 'echo $DOCKER_USERNAME', returnStdout: true).trim()
+                        sh "docker push $dockerUsername/jenkins:${currentBuild.number}"
                     }
                 }
             }
